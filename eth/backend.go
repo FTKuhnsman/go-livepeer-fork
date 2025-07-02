@@ -13,10 +13,10 @@ import (
 	"github.com/ethereum/go-ethereum/accounts/abi"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/core/types"
-	"github.com/ethereum/go-ethereum/ethclient"
 	"github.com/ethereum/go-ethereum/params"
 	"github.com/golang/glog"
 	"github.com/livepeer/go-livepeer/eth/contracts"
+	"github.com/livepeer/go-livepeer/eth/poolclient"
 )
 
 var abis = []string{
@@ -53,7 +53,7 @@ type Backend interface {
 }
 
 type backend struct {
-	*ethclient.Client
+	*poolclient.PoolClient
 	nonceManager *NonceManager
 	signer       types.Signer
 	gpm          *GasPriceMonitor
@@ -62,9 +62,9 @@ type backend struct {
 	sync.RWMutex
 }
 
-func NewBackend(client *ethclient.Client, signer types.Signer, gpm *GasPriceMonitor, tm *TransactionManager) Backend {
+func NewBackend(client *poolclient.PoolClient, signer types.Signer, gpm *GasPriceMonitor, tm *TransactionManager) Backend {
 	return &backend{
-		Client:       client,
+		PoolClient:   client,
 		nonceManager: NewNonceManager(client),
 		signer:       signer,
 		gpm:          gpm,
@@ -122,7 +122,7 @@ func (b *backend) SuggestGasTipCap(ctx context.Context) (*big.Int, error) {
 		return nil, err
 	}
 
-	tip, err := b.Client.SuggestGasTipCap(ctx)
+	tip, err := b.PoolClient.SuggestGasTipCap(ctx)
 	if err != nil {
 		// SuggestGasTipCap() uses the eth_maxPriorityFeePerGas RPC call under the hood which
 		// is not a part of the ETH JSON-RPC spec.
@@ -154,13 +154,13 @@ type txLog struct {
 
 func (b *backend) CallContract(ctx context.Context, msg ethereum.CallMsg, blockNumber *big.Int) ([]byte, error) {
 	return b.retryRemoteCall(func() ([]byte, error) {
-		return b.Client.CallContract(ctx, msg, blockNumber)
+		return b.PoolClient.CallContract(ctx, msg, blockNumber)
 	})
 }
 
 func (b *backend) PendingCallContract(ctx context.Context, msg ethereum.CallMsg) ([]byte, error) {
 	return b.retryRemoteCall(func() ([]byte, error) {
-		return b.Client.PendingCallContract(ctx, msg)
+		return b.PoolClient.PendingCallContract(ctx, msg)
 	})
 }
 

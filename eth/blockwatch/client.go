@@ -12,8 +12,7 @@ import (
 	"github.com/ethereum/go-ethereum/common/hexutil"
 	"github.com/ethereum/go-ethereum/common/math"
 	"github.com/ethereum/go-ethereum/core/types"
-	"github.com/ethereum/go-ethereum/ethclient"
-	"github.com/ethereum/go-ethereum/rpc"
+	"github.com/livepeer/go-livepeer/eth/poolclient"
 )
 
 // Client defines the methods needed to satisfy the client expected when
@@ -26,22 +25,30 @@ type Client interface {
 
 // RPCClient is a Client for fetching Ethereum blocks from a specific JSON-RPC endpoint.
 type RPCClient struct {
-	rpcClient      *rpc.Client
-	client         *ethclient.Client
+	rpcClient      *poolclient.PoolClient
+	client         *poolclient.PoolClient
 	requestTimeout time.Duration
 }
 
 // NewRPCClient returns a new Client for fetching Ethereum blocks using the given
 // ethclient.Client.
 func NewRPCClient(rpcURL string, requestTimeout time.Duration) (*RPCClient, error) {
-	ethClient, err := ethclient.Dial(rpcURL)
+	// poolClientConfig := pc.PoolClientConfig{
+	// 	RPCURLs:    rpcURL,
+	// 	MaxRetries: 3,
+	// 	Backoff:    100 * time.Millisecond,
+	// }
+
+	// url, _ := poolClientConfig.RPCURLsSlice()
+	ethClient, err := poolclient.Dial(rpcURL)
 	if err != nil {
 		return nil, err
 	}
-	rpcClient, err := rpc.Dial(rpcURL)
+	rpcClient, err := poolclient.Dial(rpcURL)
 	if err != nil {
 		return nil, err
 	}
+
 	return &RPCClient{rpcClient: rpcClient, client: ethClient, requestTimeout: requestTimeout}, nil
 }
 

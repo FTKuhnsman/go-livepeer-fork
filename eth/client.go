@@ -26,11 +26,11 @@ import (
 	ethcommon "github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/core/types"
 	"github.com/ethereum/go-ethereum/crypto"
-	"github.com/ethereum/go-ethereum/ethclient"
 	"github.com/ethereum/go-ethereum/signer/core/apitypes"
 	"github.com/golang/glog"
 	"github.com/livepeer/go-livepeer/common"
 	"github.com/livepeer/go-livepeer/eth/contracts"
+	"github.com/livepeer/go-livepeer/eth/poolclient"
 	lpTypes "github.com/livepeer/go-livepeer/eth/types"
 	"github.com/livepeer/go-livepeer/pm"
 	"github.com/pkg/errors"
@@ -167,7 +167,7 @@ type client struct {
 type LivepeerEthClientConfig struct {
 	AccountManager     AccountManager
 	GasPriceMonitor    *GasPriceMonitor
-	EthClient          *ethclient.Client
+	EthClient          *poolclient.PoolClient
 	TransactionManager *TransactionManager
 	Signer             types.Signer
 	ControllerAddr     ethcommon.Address

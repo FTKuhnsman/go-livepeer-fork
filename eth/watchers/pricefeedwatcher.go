@@ -7,10 +7,10 @@ import (
 	"sync"
 	"time"
 
-	"github.com/ethereum/go-ethereum/ethclient"
 	"github.com/ethereum/go-ethereum/event"
 	"github.com/livepeer/go-livepeer/clog"
 	"github.com/livepeer/go-livepeer/eth"
+	"github.com/livepeer/go-livepeer/eth/poolclient"
 )
 
 const (
@@ -43,7 +43,7 @@ type priceFeedWatcher struct {
 
 // NewPriceFeedWatcher creates a new PriceFeedWatcher instance. It will already
 // fetch the current price and start a goroutine to watch for updates.
-func NewPriceFeedWatcher(ethClient *ethclient.Client, priceFeedAddr string) (PriceFeedWatcher, error) {
+func NewPriceFeedWatcher(ethClient *poolclient.PoolClient, priceFeedAddr string) (PriceFeedWatcher, error) {
 	priceFeed, err := eth.NewPriceFeedEthClient(ethClient, priceFeedAddr)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create price feed client: %w", err)

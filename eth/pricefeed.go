@@ -8,8 +8,8 @@ import (
 
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
 	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/ethclient"
 	"github.com/livepeer/go-livepeer/eth/contracts/chainlink"
+	"github.com/livepeer/go-livepeer/eth/poolclient"
 )
 
 type PriceData struct {
@@ -25,7 +25,7 @@ type PriceFeedEthClient interface {
 	FetchPriceData() (PriceData, error)
 }
 
-func NewPriceFeedEthClient(ethClient *ethclient.Client, priceFeedAddr string) (PriceFeedEthClient, error) {
+func NewPriceFeedEthClient(ethClient *poolclient.PoolClient, priceFeedAddr string) (PriceFeedEthClient, error) {
 	addr := common.HexToAddress(priceFeedAddr)
 	priceFeed, err := chainlink.NewAggregatorV3Interface(addr, ethClient)
 	if err != nil {
@@ -39,7 +39,7 @@ func NewPriceFeedEthClient(ethClient *ethclient.Client, priceFeedAddr string) (P
 }
 
 type priceFeedClient struct {
-	client    *ethclient.Client
+	client    *poolclient.PoolClient
 	priceFeed *chainlink.AggregatorV3Interface
 }
 

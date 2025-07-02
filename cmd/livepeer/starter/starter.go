@@ -23,7 +23,6 @@ import (
 
 	ethcommon "github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/core/types"
-	"github.com/ethereum/go-ethereum/ethclient"
 	"github.com/ethereum/go-ethereum/params"
 	"github.com/ethereum/go-ethereum/rpc"
 	"github.com/golang/glog"
@@ -34,6 +33,7 @@ import (
 	"github.com/livepeer/go-livepeer/discovery"
 	"github.com/livepeer/go-livepeer/eth"
 	"github.com/livepeer/go-livepeer/eth/blockwatch"
+	"github.com/livepeer/go-livepeer/eth/poolclient"
 	"github.com/livepeer/go-livepeer/eth/watchers"
 	lpmon "github.com/livepeer/go-livepeer/monitor"
 	"github.com/livepeer/go-livepeer/pm"
@@ -702,15 +702,28 @@ func StartLivepeer(ctx context.Context, cfg LivepeerConfig) {
 		}
 
 		//Set up eth client
-		backend, err := ethclient.Dial(*cfg.EthUrl)
+
+		pcConfig := poolclient.PoolClientConfig{
+			RPCURLs:    *cfg.EthUrl,
+			MaxRetries: 3,
+			Backoff:    500 * time.Millisecond,
+		}
+
+		test_backend, err := poolclient.NewPoolClient(pcConfig)
 		if err != nil {
 			glog.Errorf("Failed to connect to Ethereum client: %v", err)
 			return
 		}
 
-		chainID, err := backend.ChainID(ctx)
+		chainID, err := test_backend.ChainID(ctx)
 		if err != nil {
 			glog.Errorf("failed to get chain ID from remote ethereum node: %v", err)
+			return
+		}
+
+		backend, err := poolclient.Dial(*cfg.EthUrl)
+		if err != nil {
+			glog.Errorf("Failed to connect to Ethereum client: %v", err)
 			return
 		}
 
@@ -749,7 +762,7 @@ func StartLivepeer(ctx context.Context, cfg LivepeerConfig) {
 			return
 		}
 
-		tm := eth.NewTransactionManager(backend, gpm, am, *cfg.TxTimeout, *cfg.MaxTxReplacements)
+		tm := eth.NewTransactionManager(*backend, gpm, am, *cfg.TxTimeout, *cfg.MaxTxReplacements)
 		go tm.Start()
 		defer tm.Stop()
 

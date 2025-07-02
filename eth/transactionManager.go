@@ -15,6 +15,7 @@ import (
 	"github.com/ethereum/go-ethereum/event"
 	"github.com/golang/glog"
 	"github.com/livepeer/go-livepeer/common"
+	"github.com/livepeer/go-livepeer/eth/poolclient"
 )
 
 // The default price bump required by geth is 10%
@@ -84,7 +85,7 @@ func (tq transactionQueue) peek() *types.Transaction {
 	return tq[0]
 }
 
-func NewTransactionManager(eth transactionSenderReader, gpm *GasPriceMonitor, signer transactionSigner, txTimeout time.Duration, maxReplacements int) *TransactionManager {
+func NewTransactionManager(eth *poolclient.PoolClient, gpm *GasPriceMonitor, signer transactionSigner, txTimeout time.Duration, maxReplacements int) *TransactionManager {
 	return &TransactionManager{
 		cond:            sync.NewCond(&sync.Mutex{}),
 		txTimeout:       txTimeout,

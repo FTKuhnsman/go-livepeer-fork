@@ -12,7 +12,7 @@ import (
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/core/types"
 	"github.com/ethereum/go-ethereum/crypto"
-	"github.com/ethereum/go-ethereum/ethclient"
+	"github.com/livepeer/go-livepeer/eth/poolclient"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -48,7 +48,7 @@ func TestNewTxLog(t *testing.T) {
 
 func TestSendTransaction_SendErr_DontUpdateNonce(t *testing.T) {
 	// client := &ethclient.Client{}
-	client, err := ethclient.Dial("https://rinkeby.infura.io")
+	client, err := poolclient.Dial("https://rinkeby.infura.io")
 	require.Nil(t, err)
 	signer := types.NewEIP155Signer(big.NewInt(1234))
 
