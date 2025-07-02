@@ -13,1000 +13,1320 @@ import (
 	"github.com/ethereum/go-ethereum/rpc"
 )
 
-func (pc *PoolClient) Client() *rpc.Client {
+
+func (pc *PoolClient) Client() (*rpc.Client) {
+	
 	results, err := pc.retry(func(client *ethclient.Client) ([]interface{}, error) {
-
+	
+		
 		r0 := client.Client()
-
-		return []interface{}{r0}, nil
-
+		
+		return []interface{}{ r0 }, nil
+		
+		
 	}, 1)
 	if err != nil {
-
+		
 		return nil
-
+		
 	}
-
+	
+	
 	var ok bool
-
-	r0, ok := results[0].(*rpc.Client)
-	if !ok {
-		return nil
-	}
-
-	return r0
-
+	
+	
+	r0, ok := results[0].(*rpc.Client); if !ok { return nil }
+	
+	
+		
+		return r0
+		
+	
+	
 }
 
 func (pc *PoolClient) ChainID(ctx context.Context) (*big.Int, error) {
+	
 	results, err := pc.retry(func(client *ethclient.Client) ([]interface{}, error) {
-
+	
+		
 		r0, r1 := client.ChainID(ctx)
-
-		return []interface{}{r0, r1}, r1
-
+		
+		return []interface{}{ r0, r1 }, r1
+		
+		
 	}, 2)
 	if err != nil {
-
+		
+		
 		return nil, err
-
+		
+		
 	}
-
+	
+	
 	var ok bool
-
-	r0, ok := results[0].(*big.Int)
-	if !ok {
-		return nil, fmt.Errorf("invalid type for r0")
-	}
-
-	return r0, nil
-
+	
+	
+	r0, ok := results[0].(*big.Int); if !ok { return nil, fmt.Errorf("invalid type for r0") }
+	
+	
+	    
+		return r0, nil
+		
+	
+	
 }
 
 func (pc *PoolClient) BlockByHash(ctx context.Context, hash common.Hash) (*types.Block, error) {
+	
 	results, err := pc.retry(func(client *ethclient.Client) ([]interface{}, error) {
-
+	
+		
 		r0, r1 := client.BlockByHash(ctx, hash)
-
-		return []interface{}{r0, r1}, r1
-
+		
+		return []interface{}{ r0, r1 }, r1
+		
+		
 	}, 2)
 	if err != nil {
-
+		
+		
 		return nil, err
-
+		
+		
 	}
-
+	
+	
 	var ok bool
-
-	r0, ok := results[0].(*types.Block)
-	if !ok {
-		return nil, fmt.Errorf("invalid type for r0")
-	}
-
-	return r0, nil
-
+	
+	
+	r0, ok := results[0].(*types.Block); if !ok { return nil, fmt.Errorf("invalid type for r0") }
+	
+	
+	    
+		return r0, nil
+		
+	
+	
 }
 
 func (pc *PoolClient) BlockByNumber(ctx context.Context, number *big.Int) (*types.Block, error) {
+	
 	results, err := pc.retry(func(client *ethclient.Client) ([]interface{}, error) {
-
+	
+		
 		r0, r1 := client.BlockByNumber(ctx, number)
-
-		return []interface{}{r0, r1}, r1
-
+		
+		return []interface{}{ r0, r1 }, r1
+		
+		
 	}, 2)
 	if err != nil {
-
+		
+		
 		return nil, err
-
+		
+		
 	}
-
+	
+	
 	var ok bool
-
-	r0, ok := results[0].(*types.Block)
-	if !ok {
-		return nil, fmt.Errorf("invalid type for r0")
-	}
-
-	return r0, nil
-
+	
+	
+	r0, ok := results[0].(*types.Block); if !ok { return nil, fmt.Errorf("invalid type for r0") }
+	
+	
+	    
+		return r0, nil
+		
+	
+	
 }
 
 func (pc *PoolClient) BlockNumber(ctx context.Context) (uint64, error) {
+	
 	results, err := pc.retry(func(client *ethclient.Client) ([]interface{}, error) {
-
+	
+		
 		r0, r1 := client.BlockNumber(ctx)
-
-		return []interface{}{r0, r1}, r1
-
+		
+		return []interface{}{ r0, r1 }, r1
+		
+		
 	}, 2)
 	if err != nil {
-
+		
+		
 		return 0, err
-
+		
+		
 	}
-
+	
+	
 	var ok bool
-
-	r0, ok := results[0].(uint64)
-	if !ok {
-		return 0, fmt.Errorf("invalid type for r0")
-	}
-
-	return r0, nil
-
+	
+	
+	r0, ok := results[0].(uint64); if !ok { return 0, fmt.Errorf("invalid type for r0") }
+	
+	
+	    
+		return r0, nil
+		
+	
+	
 }
 
 func (pc *PoolClient) PeerCount(ctx context.Context) (uint64, error) {
+	
 	results, err := pc.retry(func(client *ethclient.Client) ([]interface{}, error) {
-
+	
+		
 		r0, r1 := client.PeerCount(ctx)
-
-		return []interface{}{r0, r1}, r1
-
+		
+		return []interface{}{ r0, r1 }, r1
+		
+		
 	}, 2)
 	if err != nil {
-
+		
+		
 		return 0, err
-
+		
+		
 	}
-
+	
+	
 	var ok bool
-
-	r0, ok := results[0].(uint64)
-	if !ok {
-		return 0, fmt.Errorf("invalid type for r0")
-	}
-
-	return r0, nil
-
+	
+	
+	r0, ok := results[0].(uint64); if !ok { return 0, fmt.Errorf("invalid type for r0") }
+	
+	
+	    
+		return r0, nil
+		
+	
+	
 }
 
 func (pc *PoolClient) BlockReceipts(ctx context.Context, blockNrOrHash rpc.BlockNumberOrHash) ([]*types.Receipt, error) {
+	
 	results, err := pc.retry(func(client *ethclient.Client) ([]interface{}, error) {
-
+	
+		
 		r0, r1 := client.BlockReceipts(ctx, blockNrOrHash)
-
-		return []interface{}{r0, r1}, r1
-
+		
+		return []interface{}{ r0, r1 }, r1
+		
+		
 	}, 2)
 	if err != nil {
-
+		
+		
 		return []*types.Receipt{}, err
-
+		
+		
 	}
-
+	
+	
 	var ok bool
-
-	r0, ok := results[0].([]*types.Receipt)
-	if !ok {
-		return []*types.Receipt{}, fmt.Errorf("invalid type for r0")
-	}
-
-	return r0, nil
-
+	
+	
+	r0, ok := results[0].([]*types.Receipt); if !ok { return []*types.Receipt{}, fmt.Errorf("invalid type for r0") }
+	
+	
+	    
+		return r0, nil
+		
+	
+	
 }
 
 func (pc *PoolClient) HeaderByHash(ctx context.Context, hash common.Hash) (*types.Header, error) {
+	
 	results, err := pc.retry(func(client *ethclient.Client) ([]interface{}, error) {
-
+	
+		
 		r0, r1 := client.HeaderByHash(ctx, hash)
-
-		return []interface{}{r0, r1}, r1
-
+		
+		return []interface{}{ r0, r1 }, r1
+		
+		
 	}, 2)
 	if err != nil {
-
+		
+		
 		return nil, err
-
+		
+		
 	}
-
+	
+	
 	var ok bool
-
-	r0, ok := results[0].(*types.Header)
-	if !ok {
-		return nil, fmt.Errorf("invalid type for r0")
-	}
-
-	return r0, nil
-
+	
+	
+	r0, ok := results[0].(*types.Header); if !ok { return nil, fmt.Errorf("invalid type for r0") }
+	
+	
+	    
+		return r0, nil
+		
+	
+	
 }
 
 func (pc *PoolClient) HeaderByNumber(ctx context.Context, number *big.Int) (*types.Header, error) {
+	
 	results, err := pc.retry(func(client *ethclient.Client) ([]interface{}, error) {
-
+	
+		
 		r0, r1 := client.HeaderByNumber(ctx, number)
-
-		return []interface{}{r0, r1}, r1
-
+		
+		return []interface{}{ r0, r1 }, r1
+		
+		
 	}, 2)
 	if err != nil {
-
+		
+		
 		return nil, err
-
+		
+		
 	}
-
+	
+	
 	var ok bool
-
-	r0, ok := results[0].(*types.Header)
-	if !ok {
-		return nil, fmt.Errorf("invalid type for r0")
-	}
-
-	return r0, nil
-
+	
+	
+	r0, ok := results[0].(*types.Header); if !ok { return nil, fmt.Errorf("invalid type for r0") }
+	
+	
+	    
+		return r0, nil
+		
+	
+	
 }
 
 func (pc *PoolClient) TransactionByHash(ctx context.Context, hash common.Hash) (tx *types.Transaction, isPending bool, err error) {
+	
 	results, err := pc.retry(func(client *ethclient.Client) ([]interface{}, error) {
-
+	
+		
 		tx, isPending, err := client.TransactionByHash(ctx, hash)
-
-		return []interface{}{tx, isPending, err}, err
-
+		
+		return []interface{}{ tx, isPending, err }, err
+		
+		
 	}, 3)
 	if err != nil {
-
+		
+		
 		return nil, false, err
-
+		
+		
 	}
-
+	
+	
 	var ok bool
-
-	tx, ok = results[0].(*types.Transaction)
-	if !ok {
-		return nil, false, fmt.Errorf("invalid type for tx")
-	}
-
-	isPending, ok = results[1].(bool)
-	if !ok {
-		return nil, false, fmt.Errorf("invalid type for isPending")
-	}
-
-	return tx, isPending, nil
-
+	
+	
+	tx, ok = results[0].(*types.Transaction); if !ok { return nil, false, fmt.Errorf("invalid type for tx") }
+	
+	isPending, ok = results[1].(bool); if !ok { return nil, false, fmt.Errorf("invalid type for isPending") }
+	
+	
+	    
+		return tx, isPending, nil
+		
+	
+	
 }
 
 func (pc *PoolClient) TransactionSender(ctx context.Context, tx *types.Transaction, block common.Hash, index uint) (common.Address, error) {
+	
 	results, err := pc.retry(func(client *ethclient.Client) ([]interface{}, error) {
-
+	
+		
 		r0, r1 := client.TransactionSender(ctx, tx, block, index)
-
-		return []interface{}{r0, r1}, r1
-
+		
+		return []interface{}{ r0, r1 }, r1
+		
+		
 	}, 2)
 	if err != nil {
-
+		
+		
 		return common.Address{}, err
-
+		
+		
 	}
-
+	
+	
 	var ok bool
-
-	r0, ok := results[0].(common.Address)
-	if !ok {
-		return common.Address{}, fmt.Errorf("invalid type for r0")
-	}
-
-	return r0, nil
-
+	
+	
+	r0, ok := results[0].(common.Address); if !ok { return common.Address{}, fmt.Errorf("invalid type for r0") }
+	
+	
+	    
+		return r0, nil
+		
+	
+	
 }
 
 func (pc *PoolClient) TransactionCount(ctx context.Context, blockHash common.Hash) (uint, error) {
+	
 	results, err := pc.retry(func(client *ethclient.Client) ([]interface{}, error) {
-
+	
+		
 		r0, r1 := client.TransactionCount(ctx, blockHash)
-
-		return []interface{}{r0, r1}, r1
-
+		
+		return []interface{}{ r0, r1 }, r1
+		
+		
 	}, 2)
 	if err != nil {
-
+		
+		
 		return 0, err
-
+		
+		
 	}
-
+	
+	
 	var ok bool
-
-	r0, ok := results[0].(uint)
-	if !ok {
-		return 0, fmt.Errorf("invalid type for r0")
-	}
-
-	return r0, nil
-
+	
+	
+	r0, ok := results[0].(uint); if !ok { return 0, fmt.Errorf("invalid type for r0") }
+	
+	
+	    
+		return r0, nil
+		
+	
+	
 }
 
 func (pc *PoolClient) TransactionInBlock(ctx context.Context, blockHash common.Hash, index uint) (*types.Transaction, error) {
+	
 	results, err := pc.retry(func(client *ethclient.Client) ([]interface{}, error) {
-
+	
+		
 		r0, r1 := client.TransactionInBlock(ctx, blockHash, index)
-
-		return []interface{}{r0, r1}, r1
-
+		
+		return []interface{}{ r0, r1 }, r1
+		
+		
 	}, 2)
 	if err != nil {
-
+		
+		
 		return nil, err
-
+		
+		
 	}
-
+	
+	
 	var ok bool
-
-	r0, ok := results[0].(*types.Transaction)
-	if !ok {
-		return nil, fmt.Errorf("invalid type for r0")
-	}
-
-	return r0, nil
-
+	
+	
+	r0, ok := results[0].(*types.Transaction); if !ok { return nil, fmt.Errorf("invalid type for r0") }
+	
+	
+	    
+		return r0, nil
+		
+	
+	
 }
 
 func (pc *PoolClient) TransactionReceipt(ctx context.Context, txHash common.Hash) (*types.Receipt, error) {
+	
 	results, err := pc.retry(func(client *ethclient.Client) ([]interface{}, error) {
-
+	
+		
 		r0, r1 := client.TransactionReceipt(ctx, txHash)
-
-		return []interface{}{r0, r1}, r1
-
+		
+		return []interface{}{ r0, r1 }, r1
+		
+		
 	}, 2)
 	if err != nil {
-
+		
+		
 		return nil, err
-
+		
+		
 	}
-
+	
+	
 	var ok bool
-
-	r0, ok := results[0].(*types.Receipt)
-	if !ok {
-		return nil, fmt.Errorf("invalid type for r0")
-	}
-
-	return r0, nil
-
+	
+	
+	r0, ok := results[0].(*types.Receipt); if !ok { return nil, fmt.Errorf("invalid type for r0") }
+	
+	
+	    
+		return r0, nil
+		
+	
+	
 }
 
 func (pc *PoolClient) SyncProgress(ctx context.Context) (*ethereum.SyncProgress, error) {
+	
 	results, err := pc.retry(func(client *ethclient.Client) ([]interface{}, error) {
-
+	
+		
 		r0, r1 := client.SyncProgress(ctx)
-
-		return []interface{}{r0, r1}, r1
-
+		
+		return []interface{}{ r0, r1 }, r1
+		
+		
 	}, 2)
 	if err != nil {
-
+		
+		
 		return nil, err
-
+		
+		
 	}
-
+	
+	
 	var ok bool
-
-	r0, ok := results[0].(*ethereum.SyncProgress)
-	if !ok {
-		return nil, fmt.Errorf("invalid type for r0")
-	}
-
-	return r0, nil
-
+	
+	
+	r0, ok := results[0].(*ethereum.SyncProgress); if !ok { return nil, fmt.Errorf("invalid type for r0") }
+	
+	
+	    
+		return r0, nil
+		
+	
+	
 }
 
 func (pc *PoolClient) SubscribeNewHead(ctx context.Context, ch chan<- *types.Header) (ethereum.Subscription, error) {
+	
 	results, err := pc.retry(func(client *ethclient.Client) ([]interface{}, error) {
-
+	
+		
 		r0, r1 := client.SubscribeNewHead(ctx, ch)
-
-		return []interface{}{r0, r1}, r1
-
+		
+		return []interface{}{ r0, r1 }, r1
+		
+		
 	}, 2)
 	if err != nil {
-
+		
+		
 		return nil, err
-
+		
+		
 	}
-
+	
+	
 	var ok bool
-
-	r0, ok := results[0].(ethereum.Subscription)
-	if !ok {
-		return nil, fmt.Errorf("invalid type for r0")
-	}
-
-	return r0, nil
-
+	
+	
+	r0, ok := results[0].(ethereum.Subscription); if !ok { return nil, fmt.Errorf("invalid type for r0") }
+	
+	
+	    
+		return r0, nil
+		
+	
+	
 }
 
 func (pc *PoolClient) NetworkID(ctx context.Context) (*big.Int, error) {
+	
 	results, err := pc.retry(func(client *ethclient.Client) ([]interface{}, error) {
-
+	
+		
 		r0, r1 := client.NetworkID(ctx)
-
-		return []interface{}{r0, r1}, r1
-
+		
+		return []interface{}{ r0, r1 }, r1
+		
+		
 	}, 2)
 	if err != nil {
-
+		
+		
 		return nil, err
-
+		
+		
 	}
-
+	
+	
 	var ok bool
-
-	r0, ok := results[0].(*big.Int)
-	if !ok {
-		return nil, fmt.Errorf("invalid type for r0")
-	}
-
-	return r0, nil
-
+	
+	
+	r0, ok := results[0].(*big.Int); if !ok { return nil, fmt.Errorf("invalid type for r0") }
+	
+	
+	    
+		return r0, nil
+		
+	
+	
 }
 
 func (pc *PoolClient) BalanceAt(ctx context.Context, account common.Address, blockNumber *big.Int) (*big.Int, error) {
+	
 	results, err := pc.retry(func(client *ethclient.Client) ([]interface{}, error) {
-
+	
+		
 		r0, r1 := client.BalanceAt(ctx, account, blockNumber)
-
-		return []interface{}{r0, r1}, r1
-
+		
+		return []interface{}{ r0, r1 }, r1
+		
+		
 	}, 2)
 	if err != nil {
-
+		
+		
 		return nil, err
-
+		
+		
 	}
-
+	
+	
 	var ok bool
-
-	r0, ok := results[0].(*big.Int)
-	if !ok {
-		return nil, fmt.Errorf("invalid type for r0")
-	}
-
-	return r0, nil
-
+	
+	
+	r0, ok := results[0].(*big.Int); if !ok { return nil, fmt.Errorf("invalid type for r0") }
+	
+	
+	    
+		return r0, nil
+		
+	
+	
 }
 
 func (pc *PoolClient) BalanceAtHash(ctx context.Context, account common.Address, blockHash common.Hash) (*big.Int, error) {
+	
 	results, err := pc.retry(func(client *ethclient.Client) ([]interface{}, error) {
-
+	
+		
 		r0, r1 := client.BalanceAtHash(ctx, account, blockHash)
-
-		return []interface{}{r0, r1}, r1
-
+		
+		return []interface{}{ r0, r1 }, r1
+		
+		
 	}, 2)
 	if err != nil {
-
+		
+		
 		return nil, err
-
+		
+		
 	}
-
+	
+	
 	var ok bool
-
-	r0, ok := results[0].(*big.Int)
-	if !ok {
-		return nil, fmt.Errorf("invalid type for r0")
-	}
-
-	return r0, nil
-
+	
+	
+	r0, ok := results[0].(*big.Int); if !ok { return nil, fmt.Errorf("invalid type for r0") }
+	
+	
+	    
+		return r0, nil
+		
+	
+	
 }
 
 func (pc *PoolClient) StorageAt(ctx context.Context, account common.Address, key common.Hash, blockNumber *big.Int) ([]byte, error) {
+	
 	results, err := pc.retry(func(client *ethclient.Client) ([]interface{}, error) {
-
+	
+		
 		r0, r1 := client.StorageAt(ctx, account, key, blockNumber)
-
-		return []interface{}{r0, r1}, r1
-
+		
+		return []interface{}{ r0, r1 }, r1
+		
+		
 	}, 2)
 	if err != nil {
-
+		
+		
 		return []byte{}, err
-
+		
+		
 	}
-
+	
+	
 	var ok bool
-
-	r0, ok := results[0].([]byte)
-	if !ok {
-		return []byte{}, fmt.Errorf("invalid type for r0")
-	}
-
-	return r0, nil
-
+	
+	
+	r0, ok := results[0].([]byte); if !ok { return []byte{}, fmt.Errorf("invalid type for r0") }
+	
+	
+	    
+		return r0, nil
+		
+	
+	
 }
 
 func (pc *PoolClient) StorageAtHash(ctx context.Context, account common.Address, key common.Hash, blockHash common.Hash) ([]byte, error) {
+	
 	results, err := pc.retry(func(client *ethclient.Client) ([]interface{}, error) {
-
+	
+		
 		r0, r1 := client.StorageAtHash(ctx, account, key, blockHash)
-
-		return []interface{}{r0, r1}, r1
-
+		
+		return []interface{}{ r0, r1 }, r1
+		
+		
 	}, 2)
 	if err != nil {
-
+		
+		
 		return []byte{}, err
-
+		
+		
 	}
-
+	
+	
 	var ok bool
-
-	r0, ok := results[0].([]byte)
-	if !ok {
-		return []byte{}, fmt.Errorf("invalid type for r0")
-	}
-
-	return r0, nil
-
+	
+	
+	r0, ok := results[0].([]byte); if !ok { return []byte{}, fmt.Errorf("invalid type for r0") }
+	
+	
+	    
+		return r0, nil
+		
+	
+	
 }
 
 func (pc *PoolClient) CodeAt(ctx context.Context, account common.Address, blockNumber *big.Int) ([]byte, error) {
+	
 	results, err := pc.retry(func(client *ethclient.Client) ([]interface{}, error) {
-
+	
+		
 		r0, r1 := client.CodeAt(ctx, account, blockNumber)
-
-		return []interface{}{r0, r1}, r1
-
+		
+		return []interface{}{ r0, r1 }, r1
+		
+		
 	}, 2)
 	if err != nil {
-
+		
+		
 		return []byte{}, err
-
+		
+		
 	}
-
+	
+	
 	var ok bool
-
-	r0, ok := results[0].([]byte)
-	if !ok {
-		return []byte{}, fmt.Errorf("invalid type for r0")
-	}
-
-	return r0, nil
-
+	
+	
+	r0, ok := results[0].([]byte); if !ok { return []byte{}, fmt.Errorf("invalid type for r0") }
+	
+	
+	    
+		return r0, nil
+		
+	
+	
 }
 
 func (pc *PoolClient) CodeAtHash(ctx context.Context, account common.Address, blockHash common.Hash) ([]byte, error) {
+	
 	results, err := pc.retry(func(client *ethclient.Client) ([]interface{}, error) {
-
+	
+		
 		r0, r1 := client.CodeAtHash(ctx, account, blockHash)
-
-		return []interface{}{r0, r1}, r1
-
+		
+		return []interface{}{ r0, r1 }, r1
+		
+		
 	}, 2)
 	if err != nil {
-
+		
+		
 		return []byte{}, err
-
+		
+		
 	}
-
+	
+	
 	var ok bool
-
-	r0, ok := results[0].([]byte)
-	if !ok {
-		return []byte{}, fmt.Errorf("invalid type for r0")
-	}
-
-	return r0, nil
-
+	
+	
+	r0, ok := results[0].([]byte); if !ok { return []byte{}, fmt.Errorf("invalid type for r0") }
+	
+	
+	    
+		return r0, nil
+		
+	
+	
 }
 
 func (pc *PoolClient) NonceAt(ctx context.Context, account common.Address, blockNumber *big.Int) (uint64, error) {
+	
 	results, err := pc.retry(func(client *ethclient.Client) ([]interface{}, error) {
-
+	
+		
 		r0, r1 := client.NonceAt(ctx, account, blockNumber)
-
-		return []interface{}{r0, r1}, r1
-
+		
+		return []interface{}{ r0, r1 }, r1
+		
+		
 	}, 2)
 	if err != nil {
-
+		
+		
 		return 0, err
-
+		
+		
 	}
-
+	
+	
 	var ok bool
-
-	r0, ok := results[0].(uint64)
-	if !ok {
-		return 0, fmt.Errorf("invalid type for r0")
-	}
-
-	return r0, nil
-
+	
+	
+	r0, ok := results[0].(uint64); if !ok { return 0, fmt.Errorf("invalid type for r0") }
+	
+	
+	    
+		return r0, nil
+		
+	
+	
 }
 
 func (pc *PoolClient) NonceAtHash(ctx context.Context, account common.Address, blockHash common.Hash) (uint64, error) {
+	
 	results, err := pc.retry(func(client *ethclient.Client) ([]interface{}, error) {
-
+	
+		
 		r0, r1 := client.NonceAtHash(ctx, account, blockHash)
-
-		return []interface{}{r0, r1}, r1
-
+		
+		return []interface{}{ r0, r1 }, r1
+		
+		
 	}, 2)
 	if err != nil {
-
+		
+		
 		return 0, err
-
+		
+		
 	}
-
+	
+	
 	var ok bool
-
-	r0, ok := results[0].(uint64)
-	if !ok {
-		return 0, fmt.Errorf("invalid type for r0")
-	}
-
-	return r0, nil
-
+	
+	
+	r0, ok := results[0].(uint64); if !ok { return 0, fmt.Errorf("invalid type for r0") }
+	
+	
+	    
+		return r0, nil
+		
+	
+	
 }
 
 func (pc *PoolClient) FilterLogs(ctx context.Context, q ethereum.FilterQuery) ([]types.Log, error) {
+	
 	results, err := pc.retry(func(client *ethclient.Client) ([]interface{}, error) {
-
+	
+		
 		r0, r1 := client.FilterLogs(ctx, q)
-
-		return []interface{}{r0, r1}, r1
-
+		
+		return []interface{}{ r0, r1 }, r1
+		
+		
 	}, 2)
 	if err != nil {
-
+		
+		
 		return []types.Log{}, err
-
+		
+		
 	}
-
+	
+	
 	var ok bool
-
-	r0, ok := results[0].([]types.Log)
-	if !ok {
-		return []types.Log{}, fmt.Errorf("invalid type for r0")
-	}
-
-	return r0, nil
-
+	
+	
+	r0, ok := results[0].([]types.Log); if !ok { return []types.Log{}, fmt.Errorf("invalid type for r0") }
+	
+	
+	    
+		return r0, nil
+		
+	
+	
 }
 
 func (pc *PoolClient) SubscribeFilterLogs(ctx context.Context, q ethereum.FilterQuery, ch chan<- types.Log) (ethereum.Subscription, error) {
+	
 	results, err := pc.retry(func(client *ethclient.Client) ([]interface{}, error) {
-
+	
+		
 		r0, r1 := client.SubscribeFilterLogs(ctx, q, ch)
-
-		return []interface{}{r0, r1}, r1
-
+		
+		return []interface{}{ r0, r1 }, r1
+		
+		
 	}, 2)
 	if err != nil {
-
+		
+		
 		return nil, err
-
+		
+		
 	}
-
+	
+	
 	var ok bool
-
-	r0, ok := results[0].(ethereum.Subscription)
-	if !ok {
-		return nil, fmt.Errorf("invalid type for r0")
-	}
-
-	return r0, nil
-
+	
+	
+	r0, ok := results[0].(ethereum.Subscription); if !ok { return nil, fmt.Errorf("invalid type for r0") }
+	
+	
+	    
+		return r0, nil
+		
+	
+	
 }
 
 func (pc *PoolClient) PendingBalanceAt(ctx context.Context, account common.Address) (*big.Int, error) {
+	
 	results, err := pc.retry(func(client *ethclient.Client) ([]interface{}, error) {
-
+	
+		
 		r0, r1 := client.PendingBalanceAt(ctx, account)
-
-		return []interface{}{r0, r1}, r1
-
+		
+		return []interface{}{ r0, r1 }, r1
+		
+		
 	}, 2)
 	if err != nil {
-
+		
+		
 		return nil, err
-
+		
+		
 	}
-
+	
+	
 	var ok bool
-
-	r0, ok := results[0].(*big.Int)
-	if !ok {
-		return nil, fmt.Errorf("invalid type for r0")
-	}
-
-	return r0, nil
-
+	
+	
+	r0, ok := results[0].(*big.Int); if !ok { return nil, fmt.Errorf("invalid type for r0") }
+	
+	
+	    
+		return r0, nil
+		
+	
+	
 }
 
 func (pc *PoolClient) PendingStorageAt(ctx context.Context, account common.Address, key common.Hash) ([]byte, error) {
+	
 	results, err := pc.retry(func(client *ethclient.Client) ([]interface{}, error) {
-
+	
+		
 		r0, r1 := client.PendingStorageAt(ctx, account, key)
-
-		return []interface{}{r0, r1}, r1
-
+		
+		return []interface{}{ r0, r1 }, r1
+		
+		
 	}, 2)
 	if err != nil {
-
+		
+		
 		return []byte{}, err
-
+		
+		
 	}
-
+	
+	
 	var ok bool
-
-	r0, ok := results[0].([]byte)
-	if !ok {
-		return []byte{}, fmt.Errorf("invalid type for r0")
-	}
-
-	return r0, nil
-
+	
+	
+	r0, ok := results[0].([]byte); if !ok { return []byte{}, fmt.Errorf("invalid type for r0") }
+	
+	
+	    
+		return r0, nil
+		
+	
+	
 }
 
 func (pc *PoolClient) PendingCodeAt(ctx context.Context, account common.Address) ([]byte, error) {
+	
 	results, err := pc.retry(func(client *ethclient.Client) ([]interface{}, error) {
-
+	
+		
 		r0, r1 := client.PendingCodeAt(ctx, account)
-
-		return []interface{}{r0, r1}, r1
-
+		
+		return []interface{}{ r0, r1 }, r1
+		
+		
 	}, 2)
 	if err != nil {
-
+		
+		
 		return []byte{}, err
-
+		
+		
 	}
-
+	
+	
 	var ok bool
-
-	r0, ok := results[0].([]byte)
-	if !ok {
-		return []byte{}, fmt.Errorf("invalid type for r0")
-	}
-
-	return r0, nil
-
+	
+	
+	r0, ok := results[0].([]byte); if !ok { return []byte{}, fmt.Errorf("invalid type for r0") }
+	
+	
+	    
+		return r0, nil
+		
+	
+	
 }
 
 func (pc *PoolClient) PendingNonceAt(ctx context.Context, account common.Address) (uint64, error) {
+	
 	results, err := pc.retry(func(client *ethclient.Client) ([]interface{}, error) {
-
+	
+		
 		r0, r1 := client.PendingNonceAt(ctx, account)
-
-		return []interface{}{r0, r1}, r1
-
+		
+		return []interface{}{ r0, r1 }, r1
+		
+		
 	}, 2)
 	if err != nil {
-
+		
+		
 		return 0, err
-
+		
+		
 	}
-
+	
+	
 	var ok bool
-
-	r0, ok := results[0].(uint64)
-	if !ok {
-		return 0, fmt.Errorf("invalid type for r0")
-	}
-
-	return r0, nil
-
+	
+	
+	r0, ok := results[0].(uint64); if !ok { return 0, fmt.Errorf("invalid type for r0") }
+	
+	
+	    
+		return r0, nil
+		
+	
+	
 }
 
 func (pc *PoolClient) PendingTransactionCount(ctx context.Context) (uint, error) {
+	
 	results, err := pc.retry(func(client *ethclient.Client) ([]interface{}, error) {
-
+	
+		
 		r0, r1 := client.PendingTransactionCount(ctx)
-
-		return []interface{}{r0, r1}, r1
-
+		
+		return []interface{}{ r0, r1 }, r1
+		
+		
 	}, 2)
 	if err != nil {
-
+		
+		
 		return 0, err
-
+		
+		
 	}
-
+	
+	
 	var ok bool
-
-	r0, ok := results[0].(uint)
-	if !ok {
-		return 0, fmt.Errorf("invalid type for r0")
-	}
-
-	return r0, nil
-
+	
+	
+	r0, ok := results[0].(uint); if !ok { return 0, fmt.Errorf("invalid type for r0") }
+	
+	
+	    
+		return r0, nil
+		
+	
+	
 }
 
 func (pc *PoolClient) CallContract(ctx context.Context, msg ethereum.CallMsg, blockNumber *big.Int) ([]byte, error) {
+	
 	results, err := pc.retry(func(client *ethclient.Client) ([]interface{}, error) {
-
+	
+		
 		r0, r1 := client.CallContract(ctx, msg, blockNumber)
-
-		return []interface{}{r0, r1}, r1
-
+		
+		return []interface{}{ r0, r1 }, r1
+		
+		
 	}, 2)
 	if err != nil {
-
+		
+		
 		return []byte{}, err
-
+		
+		
 	}
-
+	
+	
 	var ok bool
-
-	r0, ok := results[0].([]byte)
-	if !ok {
-		return []byte{}, fmt.Errorf("invalid type for r0")
-	}
-
-	return r0, nil
-
+	
+	
+	r0, ok := results[0].([]byte); if !ok { return []byte{}, fmt.Errorf("invalid type for r0") }
+	
+	
+	    
+		return r0, nil
+		
+	
+	
 }
 
 func (pc *PoolClient) CallContractAtHash(ctx context.Context, msg ethereum.CallMsg, blockHash common.Hash) ([]byte, error) {
+	
 	results, err := pc.retry(func(client *ethclient.Client) ([]interface{}, error) {
-
+	
+		
 		r0, r1 := client.CallContractAtHash(ctx, msg, blockHash)
-
-		return []interface{}{r0, r1}, r1
-
+		
+		return []interface{}{ r0, r1 }, r1
+		
+		
 	}, 2)
 	if err != nil {
-
+		
+		
 		return []byte{}, err
-
+		
+		
 	}
-
+	
+	
 	var ok bool
-
-	r0, ok := results[0].([]byte)
-	if !ok {
-		return []byte{}, fmt.Errorf("invalid type for r0")
-	}
-
-	return r0, nil
-
+	
+	
+	r0, ok := results[0].([]byte); if !ok { return []byte{}, fmt.Errorf("invalid type for r0") }
+	
+	
+	    
+		return r0, nil
+		
+	
+	
 }
 
 func (pc *PoolClient) PendingCallContract(ctx context.Context, msg ethereum.CallMsg) ([]byte, error) {
+	
 	results, err := pc.retry(func(client *ethclient.Client) ([]interface{}, error) {
-
+	
+		
 		r0, r1 := client.PendingCallContract(ctx, msg)
-
-		return []interface{}{r0, r1}, r1
-
+		
+		return []interface{}{ r0, r1 }, r1
+		
+		
 	}, 2)
 	if err != nil {
-
+		
+		
 		return []byte{}, err
-
+		
+		
 	}
-
+	
+	
 	var ok bool
-
-	r0, ok := results[0].([]byte)
-	if !ok {
-		return []byte{}, fmt.Errorf("invalid type for r0")
-	}
-
-	return r0, nil
-
+	
+	
+	r0, ok := results[0].([]byte); if !ok { return []byte{}, fmt.Errorf("invalid type for r0") }
+	
+	
+	    
+		return r0, nil
+		
+	
+	
 }
 
 func (pc *PoolClient) SuggestGasPrice(ctx context.Context) (*big.Int, error) {
+	
 	results, err := pc.retry(func(client *ethclient.Client) ([]interface{}, error) {
-
+	
+		
 		r0, r1 := client.SuggestGasPrice(ctx)
-
-		return []interface{}{r0, r1}, r1
-
+		
+		return []interface{}{ r0, r1 }, r1
+		
+		
 	}, 2)
 	if err != nil {
-
+		
+		
 		return nil, err
-
+		
+		
 	}
-
+	
+	
 	var ok bool
-
-	r0, ok := results[0].(*big.Int)
-	if !ok {
-		return nil, fmt.Errorf("invalid type for r0")
-	}
-
-	return r0, nil
-
+	
+	
+	r0, ok := results[0].(*big.Int); if !ok { return nil, fmt.Errorf("invalid type for r0") }
+	
+	
+	    
+		return r0, nil
+		
+	
+	
 }
 
 func (pc *PoolClient) SuggestGasTipCap(ctx context.Context) (*big.Int, error) {
+	
 	results, err := pc.retry(func(client *ethclient.Client) ([]interface{}, error) {
-
+	
+		
 		r0, r1 := client.SuggestGasTipCap(ctx)
-
-		return []interface{}{r0, r1}, r1
-
+		
+		return []interface{}{ r0, r1 }, r1
+		
+		
 	}, 2)
 	if err != nil {
-
+		
+		
 		return nil, err
-
+		
+		
 	}
-
+	
+	
 	var ok bool
-
-	r0, ok := results[0].(*big.Int)
-	if !ok {
-		return nil, fmt.Errorf("invalid type for r0")
-	}
-
-	return r0, nil
-
+	
+	
+	r0, ok := results[0].(*big.Int); if !ok { return nil, fmt.Errorf("invalid type for r0") }
+	
+	
+	    
+		return r0, nil
+		
+	
+	
 }
 
 func (pc *PoolClient) FeeHistory(ctx context.Context, blockCount uint64, lastBlock *big.Int, rewardPercentiles []float64) (*ethereum.FeeHistory, error) {
+	
 	results, err := pc.retry(func(client *ethclient.Client) ([]interface{}, error) {
-
+	
+		
 		r0, r1 := client.FeeHistory(ctx, blockCount, lastBlock, rewardPercentiles)
-
-		return []interface{}{r0, r1}, r1
-
+		
+		return []interface{}{ r0, r1 }, r1
+		
+		
 	}, 2)
 	if err != nil {
-
+		
+		
 		return nil, err
-
+		
+		
 	}
-
+	
+	
 	var ok bool
-
-	r0, ok := results[0].(*ethereum.FeeHistory)
-	if !ok {
-		return nil, fmt.Errorf("invalid type for r0")
-	}
-
-	return r0, nil
-
+	
+	
+	r0, ok := results[0].(*ethereum.FeeHistory); if !ok { return nil, fmt.Errorf("invalid type for r0") }
+	
+	
+	    
+		return r0, nil
+		
+	
+	
 }
 
 func (pc *PoolClient) EstimateGas(ctx context.Context, msg ethereum.CallMsg) (uint64, error) {
+	
 	results, err := pc.retry(func(client *ethclient.Client) ([]interface{}, error) {
-
+	
+		
 		r0, r1 := client.EstimateGas(ctx, msg)
-
-		return []interface{}{r0, r1}, r1
-
+		
+		return []interface{}{ r0, r1 }, r1
+		
+		
 	}, 2)
 	if err != nil {
-
+		
+		
 		return 0, err
-
+		
+		
 	}
-
+	
+	
 	var ok bool
-
-	r0, ok := results[0].(uint64)
-	if !ok {
-		return 0, fmt.Errorf("invalid type for r0")
-	}
-
-	return r0, nil
-
+	
+	
+	r0, ok := results[0].(uint64); if !ok { return 0, fmt.Errorf("invalid type for r0") }
+	
+	
+	    
+		return r0, nil
+		
+	
+	
 }
 
-func (pc *PoolClient) SendTransaction(ctx context.Context, tx *types.Transaction) error {
+func (pc *PoolClient) SendTransaction(ctx context.Context, tx *types.Transaction) (error) {
+	
 	_, err := pc.retry(func(client *ethclient.Client) ([]interface{}, error) {
-
+	
+		
 		r0 := client.SendTransaction(ctx, tx)
-
-		return []interface{}{r0}, r0
-
+		
+		return []interface{}{ r0 }, r0
+		
+		
 	}, 1)
 	if err != nil {
-
+		
+		
 		return err
-
+		
+		
 	}
-
-	return nil
-
+	
+	
+	
+	
+	    
+		return nil
+		
+	
+	
 }
+

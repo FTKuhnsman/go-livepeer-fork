@@ -37,7 +37,11 @@ import (
 
 {{range .Methods}}
 func (pc *PoolClient) {{.Name}}({{.Params}}) ({{.Results}}) {
+	{{if gt .NonErrorResultCount 0}}
 	results, err := pc.retry(func(client *ethclient.Client) ([]interface{}, error) {
+	{{else}}
+	_, err := pc.retry(func(client *ethclient.Client) ([]interface{}, error) {
+	{{end}}
 		{{if .HasReturn}}
 		{{.ReturnValues}} := client.{{.Name}}({{.CallParams}})
 		{{if .HasError}}
@@ -52,13 +56,19 @@ func (pc *PoolClient) {{.Name}}({{.Params}}) ({{.Results}}) {
 	}, {{.ResultCount}})
 	if err != nil {
 		{{if .HasError}}
+		{{if gt .NonErrorResultCount 0}}
 		return {{.ZeroResultsNonError}}, err
+		{{else}}
+		return err
+		{{end}}
 		{{else}}
 		return {{.ZeroResults}}
 		{{end}}
 	}
 	{{if .HasReturn}}
+	{{if gt .ResultAssignmentsCount 0}}
 	var ok bool
+	{{end}}
 	{{range $i, $assignment := .ResultAssignments}}
 	{{$assignment}}
 	{{end}}
@@ -69,7 +79,11 @@ func (pc *PoolClient) {{.Name}}({{.Params}}) ({{.Results}}) {
 		return nil
 		{{end}}
 	{{else}}
-	return {{.NonErrorReturnValues}}
+		{{if gt .NonErrorResultCount 0}}
+		return {{.NonErrorReturnValues}}
+		{{else}}
+		return
+		{{end}}
 	{{end}}
 	{{else}}
 	return
@@ -112,14 +126,17 @@ func (pc *PoolClient) {{.Name}}({{.Params}}) ({{.Results}}) {
 	}, {{.ResultCount}})
 	if err != nil {
 		{{if .HasError}}
-		{{if gt .NonErrorResultCount 0}}
-		return {{.ZeroResultsNonError}}, err
+			{{if gt .NonErrorResultCount 0}}
+			return {{.ZeroResultsNonError}}, err
+			{{else}}
+			return err
+			{{end}}
 		{{else}}
-		return err
-		{{end}}
-		
-		{{else}}
-		return {{.ZeroResults}}
+			{{if gt .NonErrorResultCount 0}}
+			return {{.ZeroResults}}
+			{{else}}
+			return
+			{{end}}
 		{{end}}
 	}
 	{{if .HasReturn}}
@@ -129,15 +146,19 @@ func (pc *PoolClient) {{.Name}}({{.Params}}) ({{.Results}}) {
 	{{range $i, $assignment := .ResultAssignments}}
 	{{$assignment}}
 	{{end}}
-	{{if .HasError}}
-	    {{if gt .NonErrorResultCount 0}}
-		return {{.NonErrorReturnValues}}, nil
+		{{if .HasError}}
+			{{if gt .NonErrorResultCount 0}}
+			return {{.NonErrorReturnValues}}, nil
+			{{else}}
+			return nil
+			{{end}}
 		{{else}}
-		return nil
+			{{if gt .NonErrorResultCount 0}}
+			return {{.NonErrorReturnValues}}
+			{{else}}
+			return
+			{{end}}
 		{{end}}
-	{{else}}
-	return {{.NonErrorReturnValues}}
-	{{end}}
 	{{else}}
 	return
 	{{end}}
@@ -385,11 +406,13 @@ func formatCallParams(fields *ast.FieldList) string {
 	var parts []string
 	for i, field := range fields.List {
 		if len(field.Names) > 0 {
-			switch field.Type.(type) {
-			case *ast.Ellipsis:
-				parts = append(parts, fmt.Sprintf("%s...", field.Names[0].Name))
-			default:
-				parts = append(parts, field.Names[0].Name)
+			for _, name := range field.Names {
+				switch field.Type.(type) {
+				case *ast.Ellipsis:
+					parts = append(parts, fmt.Sprintf("%s...", name.Name))
+				default:
+					parts = append(parts, name.Name)
+				}
 			}
 		} else {
 			parts = append(parts, fmt.Sprintf("arg%d", i))
