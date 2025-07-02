@@ -18,7 +18,7 @@ import (
 	"github.com/ethereum/go-ethereum/rpc"
 	"github.com/golang/glog"
 	"github.com/livepeer/go-livepeer/eth"
-	"github.com/livepeer/go-livepeer/eth/poolclient"
+	"github.com/livepeer/go-livepeer/eth/rpcpool"
 )
 
 const (
@@ -154,7 +154,7 @@ func RemoteConsole(cfg DevtoolConfig) (string, error) {
 
 func EthSetup(cfg DevtoolConfig) (eth.LivepeerEthClient, *eth.GasPriceMonitor, *eth.TransactionManager, error) {
 	//Set up eth client
-	backend, err := poolclient.Dial(cfg.Endpoint)
+	backend, err := rpcpool.Dial(cfg.Endpoint)
 	if err != nil {
 		glog.Errorf("Failed to connect to Ethereum client: %v", err)
 		return nil, nil, nil, err

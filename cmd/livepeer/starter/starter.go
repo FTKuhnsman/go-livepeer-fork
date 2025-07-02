@@ -33,7 +33,7 @@ import (
 	"github.com/livepeer/go-livepeer/discovery"
 	"github.com/livepeer/go-livepeer/eth"
 	"github.com/livepeer/go-livepeer/eth/blockwatch"
-	"github.com/livepeer/go-livepeer/eth/poolclient"
+	"github.com/livepeer/go-livepeer/eth/rpcpool"
 	"github.com/livepeer/go-livepeer/eth/watchers"
 	lpmon "github.com/livepeer/go-livepeer/monitor"
 	"github.com/livepeer/go-livepeer/pm"
@@ -703,27 +703,15 @@ func StartLivepeer(ctx context.Context, cfg LivepeerConfig) {
 
 		//Set up eth client
 
-		pcConfig := poolclient.PoolClientConfig{
-			RPCURLs:    *cfg.EthUrl,
-			MaxRetries: 3,
-			Backoff:    500 * time.Millisecond,
-		}
-
-		test_backend, err := poolclient.NewPoolClient(pcConfig)
+		backend, err := rpcpool.DialContext(ctx, *cfg.EthUrl)
 		if err != nil {
-			glog.Errorf("Failed to connect to Ethereum client: %v", err)
+			glog.Errorf("Failed to connect to Ethereum clients: %v", err)
 			return
 		}
 
-		chainID, err := test_backend.ChainID(ctx)
+		chainID, err := backend.ChainID(ctx)
 		if err != nil {
 			glog.Errorf("failed to get chain ID from remote ethereum node: %v", err)
-			return
-		}
-
-		backend, err := poolclient.Dial(*cfg.EthUrl)
-		if err != nil {
-			glog.Errorf("Failed to connect to Ethereum client: %v", err)
 			return
 		}
 
@@ -801,7 +789,7 @@ func StartLivepeer(ctx context.Context, cfg LivepeerConfig) {
 		addrMap := n.Eth.ContractAddresses()
 
 		// Initialize block watcher that will emit logs used by event watchers
-		blockWatcherClient, err := blockwatch.NewRPCClient(*cfg.EthUrl, ethRPCTimeout)
+		blockWatcherClient, err := blockwatch.NewRPCClient(backend, ethRPCTimeout)
 		if err != nil {
 			glog.Errorf("Failed to setup blockwatch client: %v", err)
 			return
