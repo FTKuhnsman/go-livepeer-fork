@@ -762,7 +762,7 @@ func StartLivepeer(ctx context.Context, cfg LivepeerConfig) {
 			return
 		}
 
-		tm := eth.NewTransactionManager(*backend, gpm, am, *cfg.TxTimeout, *cfg.MaxTxReplacements)
+		tm := eth.NewTransactionManager(backend, gpm, am, *cfg.TxTimeout, *cfg.MaxTxReplacements)
 		go tm.Start()
 		defer tm.Stop()
 
