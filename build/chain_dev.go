@@ -3,4 +3,4 @@
 
 package build
 
-const HighestChain = Dev
+const HighestChain = Mainnet

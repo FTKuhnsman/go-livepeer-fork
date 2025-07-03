@@ -1,4 +1,4 @@
-package rpcpool
+package ethclient
 
 import (
 	"context"
@@ -7,15 +7,15 @@ import (
 	"sync"
 	"time"
 
-	"github.com/ethereum/go-ethereum/ethclient"
+	ec "github.com/ethereum/go-ethereum/ethclient"
 	"github.com/golang/glog"
 )
 
 //go:generate go run ../../tools/poolclient_generate.go
 
 // NewClient manages a pool of ethclient.Client instances with retry logic.
-type RPCPool struct {
-	clients              []*ethclient.Client
+type Client struct {
+	clients              []*ec.Client
 	clientStatusTrackers []ClientStatusTracker
 	mu                   sync.Mutex
 }
@@ -87,7 +87,7 @@ func (pcc *RPCPoolConfig) RPCURLsSlice() ([]string, error) {
 }
 
 // NewRPCPool creates a new EthClientPool instance.
-func NewRPCPool(cfg RPCPoolConfig) (*RPCPool, error) {
+func NewRPCPool(cfg RPCPoolConfig) (*Client, error) {
 	urls, err := cfg.RPCURLsSlice()
 	if err != nil {
 		return nil, fmt.Errorf("invalid RPC URLs: %w", err)
@@ -96,16 +96,16 @@ func NewRPCPool(cfg RPCPoolConfig) (*RPCPool, error) {
 		return nil, fmt.Errorf("at least one RPC URL is required")
 	}
 
-	clients := make([]*ethclient.Client, 0, len(urls))
+	clients := make([]*ec.Client, 0, len(urls))
 	ClientStatusTrackers := make([]ClientStatusTracker, 0, len(urls))
 
 	for _, url := range urls {
-		var client *ethclient.Client
+		var client *ec.Client
 		var err error
 		if cfg.Ctx != nil {
-			client, err = ethclient.DialContext(cfg.Ctx, url)
+			client, err = ec.DialContext(cfg.Ctx, url)
 		} else {
-			client, err = ethclient.Dial(url)
+			client, err = ec.Dial(url)
 		}
 		if err != nil {
 			glog.Errorf("rpcclient: failed to connect to %s: %v", url, err)
@@ -124,21 +124,21 @@ func NewRPCPool(cfg RPCPoolConfig) (*RPCPool, error) {
 		return nil, fmt.Errorf("no valid RPC clients connections")
 	}
 
-	return &RPCPool{
+	return &Client{
 		clients:              clients,
 		clientStatusTrackers: ClientStatusTrackers,
 	}, nil
 }
 
 // Close closes all underlying clients.
-func (pc *RPCPool) Close() {
+func (pc *Client) Close() {
 	for _, client := range pc.clients {
 		client.Close()
 	}
 }
 
 // retry executes a function across clients with retry logic.
-func (pc *RPCPool) retry(fn func(client *ethclient.Client) ([]interface{}, error), expectedResults int) ([]interface{}, error) {
+func (pc *Client) retry(fn func(client *ec.Client) ([]interface{}, error), expectedResults int) ([]interface{}, error) {
 	pc.mu.Lock()
 	defer pc.mu.Unlock()
 
@@ -160,7 +160,7 @@ func (pc *RPCPool) retry(fn func(client *ethclient.Client) ([]interface{}, error
 	return nil, fmt.Errorf("no healthy clients available to process the request after retries: %w", fmt.Errorf("all clients failed"))
 }
 
-func Dial(rawurl string) (*RPCPool, error) {
+func Dial(rawurl string) (*Client, error) {
 	cfg := RPCPoolConfig{
 		RPCURLs:         rawurl,
 		MaxBackoffDelay: 128 * time.Second,
@@ -169,7 +169,7 @@ func Dial(rawurl string) (*RPCPool, error) {
 }
 
 // DialContext creates a new PoolClient with a context for dialing.
-func DialContext(ctx context.Context, rawurl string) (*RPCPool, error) {
+func DialContext(ctx context.Context, rawurl string) (*Client, error) {
 	cfg := RPCPoolConfig{
 		RPCURLs:         rawurl,
 		MaxBackoffDelay: 128 * time.Second,

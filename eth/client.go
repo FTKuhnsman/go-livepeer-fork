@@ -30,7 +30,7 @@ import (
 	"github.com/golang/glog"
 	"github.com/livepeer/go-livepeer/common"
 	"github.com/livepeer/go-livepeer/eth/contracts"
-	"github.com/livepeer/go-livepeer/eth/rpcpool"
+	"github.com/livepeer/go-livepeer/eth/ethclient"
 	lpTypes "github.com/livepeer/go-livepeer/eth/types"
 	"github.com/livepeer/go-livepeer/pm"
 	"github.com/pkg/errors"
@@ -167,7 +167,7 @@ type client struct {
 type LivepeerEthClientConfig struct {
 	AccountManager     AccountManager
 	GasPriceMonitor    *GasPriceMonitor
-	EthClient          *rpcpool.RPCPool
+	EthClient          *ethclient.Client
 	TransactionManager *TransactionManager
 	Signer             types.Signer
 	ControllerAddr     ethcommon.Address

@@ -33,7 +33,7 @@ import (
 	"github.com/livepeer/go-livepeer/discovery"
 	"github.com/livepeer/go-livepeer/eth"
 	"github.com/livepeer/go-livepeer/eth/blockwatch"
-	"github.com/livepeer/go-livepeer/eth/rpcpool"
+	"github.com/livepeer/go-livepeer/eth/ethclient"
 	"github.com/livepeer/go-livepeer/eth/watchers"
 	lpmon "github.com/livepeer/go-livepeer/monitor"
 	"github.com/livepeer/go-livepeer/pm"
@@ -703,7 +703,7 @@ func StartLivepeer(ctx context.Context, cfg LivepeerConfig) {
 
 		//Set up eth client
 
-		backend, err := rpcpool.DialContext(ctx, *cfg.EthUrl)
+		backend, err := ethclient.DialContext(ctx, *cfg.EthUrl)
 		if err != nil {
 			glog.Errorf("Failed to connect to Ethereum clients: %v", err)
 			return

@@ -1,7 +1,7 @@
 package main
 
 import (
-	pc "github.com/livepeer/go-livepeer/eth/rpcpool"
+	pc "github.com/livepeer/go-livepeer/eth/ethclient"
 )
 
 func main() {

@@ -9,7 +9,7 @@ import (
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/livepeer/go-livepeer/eth/contracts/chainlink"
-	"github.com/livepeer/go-livepeer/eth/rpcpool"
+	"github.com/livepeer/go-livepeer/eth/ethclient"
 )
 
 type PriceData struct {
@@ -25,7 +25,7 @@ type PriceFeedEthClient interface {
 	FetchPriceData() (PriceData, error)
 }
 
-func NewPriceFeedEthClient(ethClient *rpcpool.RPCPool, priceFeedAddr string) (PriceFeedEthClient, error) {
+func NewPriceFeedEthClient(ethClient *ethclient.Client, priceFeedAddr string) (PriceFeedEthClient, error) {
 	addr := common.HexToAddress(priceFeedAddr)
 	priceFeed, err := chainlink.NewAggregatorV3Interface(addr, ethClient)
 	if err != nil {
@@ -39,7 +39,7 @@ func NewPriceFeedEthClient(ethClient *rpcpool.RPCPool, priceFeedAddr string) (Pr
 }
 
 type priceFeedClient struct {
-	client    *rpcpool.RPCPool
+	client    *ethclient.Client
 	priceFeed *chainlink.AggregatorV3Interface
 }
 

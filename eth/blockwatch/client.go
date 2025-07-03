@@ -12,7 +12,7 @@ import (
 	"github.com/ethereum/go-ethereum/common/hexutil"
 	"github.com/ethereum/go-ethereum/common/math"
 	"github.com/ethereum/go-ethereum/core/types"
-	"github.com/livepeer/go-livepeer/eth/rpcpool"
+	"github.com/livepeer/go-livepeer/eth/ethclient"
 )
 
 // Client defines the methods needed to satisfy the client expected when
@@ -25,13 +25,13 @@ type Client interface {
 
 // RPCClient is a Client for fetching Ethereum blocks from a specific JSON-RPC endpoint.
 type RPCClient struct {
-	client         *rpcpool.RPCPool
+	client         *ethclient.Client
 	requestTimeout time.Duration
 }
 
 // NewRPCClient returns a new Client for fetching Ethereum blocks using the given
 // ethclient.Client.
-func NewRPCClient(rpcPool *rpcpool.RPCPool, requestTimeout time.Duration) (*RPCClient, error) {
+func NewRPCClient(rpcPool *ethclient.Client, requestTimeout time.Duration) (*RPCClient, error) {
 
 	return &RPCClient{client: rpcPool, requestTimeout: requestTimeout}, nil
 }
